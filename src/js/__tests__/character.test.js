@@ -1,28 +1,68 @@
 import Character from '../character';
+import Bowman from '../Bowman';
+import Daemon from '../Daemon';
+import Magician from '../Magician';
+import Swordsman from '../Swordsman';
+import Undead from '../Undead';
+import Zombie from '../Zombie';
 
-test('checking the creating of an instance', () => {
-  expect(new Character('', 'Magician', 100, 1)).toEqual({
-    name: '',
-    type: 'Magician',
-    attack: 10,
-    defence: 40,
-    health: 100,
-    level: 1,
-  });
+// eslint-disable-next-line no-undef
+test.each([
+  [Bowman],
+  [Daemon],
+  [Magician],
+  [Swordsman],
+  [Undead],
+  [Zombie],
+])(
+  'Выброс ошибки в случае, если имя имеет тип отличный от типа "строка"',
+  (Character) => {
+    const result = () => new Character(123424);
+    const expected = 'Имя персонажа должно иметь тип "строка"';
+
+    // eslint-disable-next-line no-undef
+    expect(result).toThrow(expected);
+  },
+);
+
+// eslint-disable-next-line no-undef
+test.each([
+  [Bowman],
+  [Daemon],
+  [Magician],
+  [Swordsman],
+  [Undead],
+  [Zombie],
+])('Выброс ошибки в случае, если имя персонажа содержит менее 2-х символов', (Character) => {
+  const result = () => new Character('a');
+  const expected = 'Имя персонажа должно содержать от 2 до 10 символов';
+
+  // eslint-disable-next-line no-undef
+  expect(result).toThrow(expected);
 });
 
-test('throwing an error in case of non string value entered', () => {
-  expect(() => new Character(1, 'Magician', 100, 1)).toThrow();
+// eslint-disable-next-line no-undef
+test.each([
+  [Bowman],
+  [Daemon],
+  [Magician],
+  [Swordsman],
+  [Undead],
+  [Zombie],
+])('Выброс ошибки в случае, если имя персонажа содержит более 10 символов', (Character) => {
+  const result = () => new Character('LongHeroName');
+  const expected = 'Имя персонажа должно содержать от 2 до 10 символов';
+
+  // eslint-disable-next-line no-undef
+  expect(result).toThrow(expected);
 });
 
-test('throwing an error in case of name is shorter than 2 characters', () => {
-  expect(() => new Character('a', 'Magician', 100, 1)).toThrow();
+// eslint-disable-next-line no-undef
+test('Выброс ошибки в случае, если тип персонажа неизвестен', () => {
+  const result = () => new Character('Hero1', 'Archer');
+  const expected = 'Неизвестный персонаж';
+
+  // eslint-disable-next-line no-undef
+  expect(result).toThrow(expected);
 });
 
-test('throwing an error in case of name is longer than 10 characters', () => {
-  expect(() => new Character('SuperMegaHero', 'Magician', 100, 1)).toThrow();
-});
-
-test('throwing an error in case of non existed character type entered', () => {
-  expect(() => new Character('MegaHero', 'Spider', 100, 1)).toThrow();
-});
